@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- base for all links -->
+  <base href="./" />
+
+  <!-- main metas -->
+  <meta charset="UTF-8" />
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="index, follow" />
+  <!-- Indexing site in search engines and follow by crawlers to sublinks [index, noindex], [follow, no follow] -->
+
+  <!-- about site -->
+  <title>QChat Admin</title>
+  <meta name="language" content="English" />
+  <meta name="description" content="QChat Admin Portal" />
+  <meta name="keywords" content="QChat Admin" />
+  <meta name="author" content="Exabyte LLC" />
+  <meta name="copyright" content="QChat Admin" />
+
+  <!-- about site mobile -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="QChat Admin" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="#0d0d0d" />
+  <!-- notif bar color -->
+  <meta name="theme-color" content="#0d0d0d" />
+  <!-- tab color -->
+  <link rel="apple-touch-icon" href="./icon192.png" />
+
+  <!-- icons -->
+  <link rel="shortcut icon" href="./favicon.png" type="image/png" />
+  <link rel="icon" href="./favicon.png" type="image/png" />
+
+  <!-- manifest for mobile? -->
+  <link rel="manifest" href="./manifest.json?react" />
+
+  <!-- fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700&family=Inconsolata:wght@200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box !important;
+    }
+
+    .fill {
+      width: 100%;
+      height: 100%;
+    }
+
+    .w-100 {
+      width: 100%;
+    }
+
+    .h-100 {
+      height: 100%;
+    }
+
+    .ltr {
+      direction: ltr;
+    }
+
+    .rtl {
+      direction: rtl;
+    }
+
+    .enFonts {
+      font-family: "Mulish", "Tajawal", sans-serif !important;
+    }
+
+    .arFonts {
+      font-family: "Tajawal", "Mulish", sans-serif !important;
+    }
+
+    .monospace {
+      font-family: "Courier New", Courier, "Lucida Console", Monaco, monospace !important;
+      word-spacing: -0.275em;
+      letter-spacing: -0.05em;
+    }
+
+    /* animations */
+    .animate-pulsate-fwd {
+      -webkit-animation: pulsate-fwd 1s ease-in-out 1s infinite both;
+      animation: pulsate-fwd 1s ease-in-out 1s infinite both;
+    }
+
+    @-webkit-keyframes pulsate-fwd {
+      0% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+      }
+
+      50% {
+        -webkit-transform: scale(1.1);
+        transform: scale(1.1);
+      }
+
+      100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+      }
+    }
+
+    @keyframes pulsate-fwd {
+      0% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+      }
+
+      50% {
+        -webkit-transform: scale(1.1);
+        transform: scale(1.1);
+      }
+
+      100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+      }
+    }
+
+    /* html content */
+    .html-content *,
+    body {
+      margin: 0;
+      padding: 0;
+      border: none;
+    }
+
+    .html-content {
+      font-size: 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-content: center;
+      align-items: center;
+    }
+
+    .html-content table {
+      border-collapse: collapse;
+    }
+
+    .html-content table td,
+    .html-content table th {
+      border: 1px solid currentColor;
+      padding: 1rem;
+    }
+
+    .html-content ul {
+      padding: 0;
+      gap: 0;
+      width: "auto";
+    }
+
+    .html-content li {
+      padding: 0;
+      gap: 0;
+      width: "auto";
+    }
+
+    .html-content li ul {
+      padding-inline-start: 1rem;
+    }
+  </style>
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+</body>
+
+</html>
