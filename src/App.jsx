@@ -13,6 +13,7 @@ import {
   ExpandLessTwoTone,
   ExpandMoreTwoTone,
   BusinessTwoTone,
+  LogoutTwoTone,
 } from "@mui/icons-material";
 
 const App = () => {
@@ -29,26 +30,43 @@ const App = () => {
             <Scaffold
               menuLeft={
                 <SideMenu
+                  active="org.h1"
                   open={sm.value}
                   items={[
-                    SideMenuItem.link({ text: "home", icon: <HomeTwoTone /> }),
+                    SideMenuItem.link({
+                      value: "home",
+                      text: "home",
+                      icon: <HomeTwoTone />,
+                    }),
                     SideMenuItem.list({
+                      value: "org",
                       text: "org",
                       icon: <BusinessTwoTone />,
                       items: [
                         SideMenuItem.link({
+                          value: "h1",
                           text: "home1",
                           icon: <HomeTwoTone />,
                         }),
                         SideMenuItem.link({
+                          value: "h2",
                           text: "home2",
                           icon: <HomeTwoTone />,
                         }),
                         SideMenuItem.link({
+                          value: "h3",
                           text: "home3",
                           icon: <HomeTwoTone />,
                         }),
                       ],
+                    }),
+                    SideMenuItem.spacer(),
+                    SideMenuItem.button({
+                      value: "lout",
+                      text: "logout",
+                      icon: <LogoutTwoTone />,
+                      color: "text.error",
+                      bgcolor: "background.white",
                     }),
                   ]}
                 />

@@ -14,8 +14,21 @@ import {
 import { eList, eUseState } from "react-e-utils";
 import { Link } from "react-router-dom";
 
-function SMI({ type, text, icon, href, onClick, items, color, bgcolor }) {
+function SMI({
+  value,
+  type,
+  text,
+  icon,
+  href,
+  onClick,
+  items,
+  color,
+  bgcolor,
+  activeColor,
+  activeBgcolor,
+}) {
   return {
+    value,
     type,
     text,
     icon,
@@ -24,9 +37,11 @@ function SMI({ type, text, icon, href, onClick, items, color, bgcolor }) {
     items,
     color,
     bgcolor,
+    activeColor,
+    activeBgcolor,
   };
 }
-function SMIL({ open, onOpen, onClose, items }) {
+function SMIL({ open, items, pValue, active, activeColor, activeBgcolor }) {
   return eList.toArray(items, (index, item) => {
     switch (item?.type) {
       case "divider":
@@ -49,10 +64,18 @@ function SMIL({ open, onOpen, onClose, items }) {
             }}
           />
         );
-      case "text":
-      case "link":
-      case "list":
-        return <SMIE key={`esm-${index}`} open={open} {...item} />;
+      case "item":
+        return (
+          <SMIE
+            key={`esm-${index}`}
+            open={open}
+            {...item}
+            pValue={pValue}
+            active={active}
+            activeColor={item?.activeColor ?? activeColor}
+            activeBgcolor={item?.activeBgcolor ?? activeBgcolor}
+          />
+        );
       case "custom":
         return item.element;
       default:
@@ -60,8 +83,29 @@ function SMIL({ open, onOpen, onClose, items }) {
     }
   });
 }
-function SMIE({ open, text, icon, href, onClick, items, color, bgcolor }) {
-  const list = eUseState(false);
+function SMIE({
+  open,
+  text,
+  icon,
+  href,
+  onClick,
+  items,
+  color,
+  bgcolor,
+  activeColor,
+  activeBgcolor,
+  value,
+  pValue,
+  active,
+}) {
+  var key = value && `${pValue ? `${pValue}` : ""}${value}.`;
+  const selected = key && active.indexOf(key) === 0;
+  const aselected = active === key;
+  const list = eUseState(selected);
+  var listOpen = selected ? true : list.value;
+
+  console.log(active, key, selected, aselected);
+
   return (
     <>
       <ListItem sx={{ px: 0.5 }} disableGutters disablePadding dense>
@@ -71,14 +115,35 @@ function SMIE({ open, text, icon, href, onClick, items, color, bgcolor }) {
             color: color ?? "inherit",
             bgcolor: bgcolor ?? "inherit",
             justifyContent: text ? "flex-start" : "flex-end",
+            alignItems: "stretch",
+            borderRadius: 1,
+            opacity: selected ? 1 : 0.6,
+            "&:hover": {
+              opacity: 1,
+              color: color ?? "inherit",
+              bgcolor: bgcolor ?? "inherit",
+            },
+            "&.Mui-selected": {
+              opacity: 1,
+              color: activeColor ?? "inherit",
+              bgcolor: activeBgcolor ?? "inherit",
+            },
+            "&.Mui-selected:hover": {
+              opacity: 1,
+              color: activeColor ?? "inherit",
+              bgcolor: activeBgcolor ?? "inherit",
+            },
           }}
           {...(href && { component: Link, to: href })}
           {...(onClick && { onClick: onClick })}
           {...(items && {
             onClick: () => {
-              list.value = !list.value;
+              if (!selected) {
+                list.value = !list.value;
+              }
             },
           })}
+          selected={aselected}
           disableGutters
         >
           {icon && (
@@ -110,33 +175,47 @@ function SMIE({ open, text, icon, href, onClick, items, color, bgcolor }) {
               />
             </Collapse>
           )}
-          {items &&
-            (list.value ? <ExpandLessTwoTone /> : <ExpandMoreTwoTone />)}
+          {items && (
+            <Collapse
+              sx={{ pt: 0.3 }}
+              in={open}
+              collapsedSize={0}
+              orientation="horizontal"
+            >
+              {listOpen ? <ExpandLessTwoTone /> : <ExpandMoreTwoTone />}
+            </Collapse>
+          )}
         </ListItemButton>
       </ListItem>
       {items && (
         <Collapse
-          in={list.value}
+          in={listOpen}
           orientation="vertical"
           sx={{
             width: "100%",
+            pl: open ? 1 : 0.25,
           }}
         >
           <List
             component={Stack}
             flexDirection="column"
             sx={{
-              pl: 1,
-              pb: 0.5,
+              p: 0,
               position: "relative",
               overflow: "visible",
+              borderLeft: "1px dashed currentColor",
             }}
             justifyContent="flex-start"
             alignItems="flex-start"
           >
             {SMIL({
-              open: open,
-              items: items,
+              open,
+              items,
+              pValue: key,
+              selected,
+              active,
+              activeColor,
+              activeBgcolor,
             })}
           </List>
         </Collapse>
@@ -150,10 +229,14 @@ const SideMenu = ({
   onOpen,
   onClose,
   elevation = 1,
-  bgcolor = "background.primary",
-  color = "text.white",
+  color = "rgba(0,0,0)",
+  bgcolor = "rgba(255,255,255)",
+  activeColor = "rgba(255,255,255)",
+  activeBgcolor = "rgba(0,0,0)",
   items,
+  active,
 }) => {
+  active = `${active}.`;
   return (
     <Paper
       elevation={elevation}
@@ -176,20 +259,77 @@ const SideMenu = ({
         justifyContent="flex-start"
         alignItems="flex-start"
       >
-        {SMIL({ items, open })}
+        {SMIL({ items, open, active, activeColor, activeBgcolor })}
       </List>
     </Paper>
   );
 };
 export default SideMenu;
 export const SideMenuItem = {
+  custom: ({ element } = {}) => SMI({ type: "custom", element }),
   divider: ({ color } = {}) => SMI({ type: "divider", color }),
   spacer: () => SMI({ type: "spacer" }),
-  link: ({ text, icon, href, color, bgcolor }) =>
-    SMI({ type: "link", text, icon, href, color, bgcolor }),
-  button: ({ text, icon, onClick, color, bgcolor }) =>
-    SMI({ type: "button", text, icon, onClick, color, bgcolor }),
-  list: ({ text, icon, items, color, bgcolor }) =>
-    SMI({ type: "list", text, icon, items, color, bgcolor }),
-  custom: ({ element } = {}) => SMI({ type: "custom", element }),
+  link: ({
+    value,
+    text,
+    icon,
+    href,
+    color,
+    bgcolor,
+    activeColor,
+    activeBgcolor,
+  }) =>
+    SMI({
+      value,
+      type: "item",
+      text,
+      icon,
+      href,
+      color,
+      bgcolor,
+      activeColor,
+      activeBgcolor,
+    }),
+  button: ({
+    value,
+    text,
+    icon,
+    onClick,
+    color,
+    bgcolor,
+    activeColor,
+    activeBgcolor,
+  }) =>
+    SMI({
+      value,
+      type: "item",
+      text,
+      icon,
+      onClick,
+      color,
+      bgcolor,
+      activeColor,
+      activeBgcolor,
+    }),
+  list: ({
+    value,
+    text,
+    icon,
+    items,
+    color,
+    bgcolor,
+    activeColor,
+    activeBgcolor,
+  }) =>
+    SMI({
+      value,
+      type: "item",
+      text,
+      icon,
+      items,
+      color,
+      bgcolor,
+      activeColor,
+      activeBgcolor,
+    }),
 };
